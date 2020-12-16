@@ -8,7 +8,7 @@ if __name__ == "__main__":
     filters_pool = FiltersPool()
     
     noized_values = model_former.get_measurment_noize_params()
-    filters_pool.Q_picker(noized_values)
+    # filters_pool.Q_picker(noized_values)
 
     # noized_values = model_former.get_egorushkin_params()
     filters_pool.simple_kalman(noized_values)

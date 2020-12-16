@@ -16,20 +16,20 @@ t = (1:number_of_steps);
 TAR = 1;
 TAR_d = [0;0;0];
 
-% W = dlmread('W_values.txt');
-% X = dlmread('X_values.txt');
-% Z = dlmread('Z_values.txt');
+W = dlmread('W_values.txt');
+X = dlmread('X_values.txt');
+Z = dlmread('Z_values.txt');
 
-W = zeros(1,number_of_steps);
-W(1) = randi([-100,100])/100;
-X = zeros(3,number_of_steps);
-Z = zeros(1,number_of_steps);
-Vz = randi([-100,100])*1e-3;
-for k = 2:5000
-    W(k) = randi([-100,100])/100;
-    X(:,k) = F * X(:,k-1) + G * W(k-1);
-    Z(k) = H*X(:,k) + Vz;
-end
+% W = zeros(1,number_of_steps);
+% W(1) = randi([-100,100])/100;
+% X = zeros(3,number_of_steps);
+% Z = zeros(1,number_of_steps);
+% Vz = randi([-100,100])*1e-3;
+% for k = 2:5000
+%     W(k) = randi([-100,100])/100;
+%     X(:,k) = F * X(:,k-1) + G * W(k-1);
+%     Z(k) = H*X(:,k) + Vz;
+% end
 
 % figure('Name','ƒÂÈÙ','NumberTitle','on');
 % plot(t,X(3,:));
@@ -118,8 +118,6 @@ SAF_2 = SAF_2 / 5000;
 
 t_b = 500;
 t_e = 4000;
-
-Q_2 = [0 0 0; 0 0 0; 0 0 Q_2(3,3)*10^-2]
 % figure('Name','Œ¯Ë·Í‡ ÔÓ ÒÍÓÓÒÚË','NumberTitle','off');
 % plot(t,X(1,:),'r-',t,XA1(1,:),'b-',t,XA2(1,:),'g-');
 % grid on;
@@ -131,7 +129,7 @@ Q_2 = [0 0 0; 0 0 0; 0 0 Q_2(3,3)*10^-2]
 % legend(['X'],['XA'],['XA2'],'FontSize',8);
 
 
-
+Q_2 = [0 0 0; 0 0 0; 0 0 Q_2(3,3)*10^-2];
 % 
 % 
 figure('Name','All adaptive','NumberTitle','on');
@@ -145,7 +143,7 @@ legend(['X'],['XA'],['XA2'],'FontSize',8);
 % plot(t,X(3,:),'r-',t,XA1(3,:),'b-',t,XA2(3,:),'g-',t,Xkd(3,:));
 % grid on;
 % xlim([t_b t_e]);
-legend(['X'],['XA'],['XA2'],['Xkd'],'FontSize',8);
+% legend(['X'],['XA'],['XA2'],['Xkd'],'FontSize',8);
 
 % figure('Name','TAR Œ¥Ve –∏–∑–º–µ—Ä–µ–Ω–∏–µ —Å–∫–æ—Ä–æ—Å—Ç–∏','NumberTitle','off');
 % plot(t,TAR_d(1,:));

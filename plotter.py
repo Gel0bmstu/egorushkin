@@ -10,11 +10,11 @@ class Plotter(Settings, Vars):
 
     def plot(self, data, xlabel, ylabel, title, legend=None, linewidth=None, linestyle=None):
         if legend is not None and len(data) != len(legend):
-            print('Unable to plot graph, data length and legend width must be same')
+            print('Unable to plot {} graph, data length and legend width must be same'.format(title))
             return
         
         if linewidth is not None and len(data) != len(legend):
-            print('Unable to plot graph, data length and linewidth width must be same')
+            print('Unable to plot {} graph, data length and linewidth width must be same'.format(title))
             return
 
         width = 20
@@ -22,6 +22,11 @@ class Plotter(Settings, Vars):
         
         plt.figure(figsize=(width, height), num=self.figure_index)    
         
+        if linestyle is None:
+            linestyle = []
+            for i in range(len(data)):
+                linestyle.append('-')
+
         c = 0
         for each in data:
             if linewidth is None:
@@ -44,6 +49,7 @@ class Plotter(Settings, Vars):
 
     def run(self):
         X = [self.dVe_mesuarment_noize, self.Fn_mesuarment_noize, self.Wdrn_mesuarment_noize]
+        xboct = 300
 
         if self.plot_clear_graphs_flag:
             self.plot([self.dVe_clear], "Time, s", "Ve, m/s", 'Clear')
@@ -72,24 +78,24 @@ class Plotter(Settings, Vars):
             )
 
         if self.simple_kalman_flag:
-            self.plot(self.X_simple_kalman,\
+            self.plot([X[self.idx], self.X_simple_kalman],\
                 "Time, s", "wrdn, rad", 'Simple kalman',\
                 legend=['Noized', 'Filtered'],\
                 linewidth=[0.5, 1.5])
 
         if self.plot_first_order_filter_flag:
-            self.plot([X[self.idx], self.X_first_order],\
+            self.plot([X[self.idx][xboct:], self.X_first_order[xboct:]],\
                  "Time, s", "wrdn, rad", 'First order', ['Noized', 'Filtered'], [0.5, 1.5])
 
         if self.plot_second_order_filter_flag:
-            self.plot([X[self.idx], self.X_second_order],\
-                 "Time, s", "wrdn, rad", 'Second order', ['Noized', 'Filtered'], [0.5, 1.5])
+            self.plot([X[self.idx][xboct:], self.X_second_order[xboct:]],\
+                 "Time, s", "wrdn, rad", 'Second order', ['Noized', 'Filtered'], [0.5, 1])
 
         if self.plot_all_adaprive_flag:
-            self.plot([X[self.idx], self.X_first_order, self.X_second_order],\
+            self.plot([X[self.idx][xboct:], self.X_first_order[xboct:], self.X_second_order[xboct:]],\
                  "Time, s", "wrdn, rad", 'All adaptive', \
                  ['Noized', 'First order', 'Second order'], \
-                 [0.5, 1.5, 1.5])
+                 [0.5, 1.5, 1])
 
         if self.plot_combine_filter_flag:
             self.plot([X[self.idx], self.X_direct, self.X_reverse, self.X_combine],\

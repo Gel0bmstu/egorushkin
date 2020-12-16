@@ -17,7 +17,7 @@ class FiltersPool(Settings, Vars):
         saf_min = math.inf
         q_min = 0
         Q = 1e-12
-        idx = 0
+        chosen_idx = 0
 
         X = [self.dVe_mesuarment_noize, self.Fn_mesuarment_noize, self.Wdrn_mesuarment_noize]
 
@@ -32,20 +32,22 @@ class FiltersPool(Settings, Vars):
             if saf < saf_min:
                 q_min = Q
                 saf_min = saf
-                idx = i
+                chosen_idx = i
 
             for v in self.X_simple_kalman:
                 self.X_Q_picker[i].append(v)
 
-            Q = Q / 5
+            Q = Q / 1.5
 
         self.X_Q_picker.append([])
         for v in X[self.idx]:
             self.X_Q_picker[len(self.X_Q_picker)-1].append(v)
+
         self.Q_peaker_legend.append('Noized values')
         self.Q_line_width.append(1.5)
         self.Q_line_style.append('-.')
-        self.Q_line_width[idx] = 1.5
+        self.Q_line_width[chosen_idx] = 1.5
+
         self.Q = q_min
 
         print('Picked Q is: {}'.format(q_min))
@@ -217,14 +219,12 @@ class FiltersPool(Settings, Vars):
                               [0, 0, 0],
                               [0, 0, 0]])
 
-        K = np.array([[0],
-                      [0],
-                      [0]])
-        Q = 0
+        K = np.array([[0, 0, 1]])
+        Q = self.Q
 
         C  = np.zeros(self.iter-1) 
         Nu = np.zeros(self.iter-1) 
-        R  = 3e-5
+        R  = 5e-5
 
         Saf  = 0
         X_noize = [self.dVe_noize, self.Fn_noize, self.Wdrn_noize]
@@ -241,7 +241,7 @@ class FiltersPool(Settings, Vars):
 
         for i in range(1, self.iter-1):
             xkd = np.dot(self.F, filtred_values[i - 1])
-            Nu[i] = Z[i] - np.dot(H, xkd)
+            Nu[i] = Z[i] - np.dot(H, xkd)[0][0]
             i_med = (i - 1) / i
             C[i]  = np.dot(i_med, C[i - 1]) + np.dot(np.dot((1 / i),  Nu), np.transpose(Nu))
             
